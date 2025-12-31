@@ -322,7 +322,7 @@ function initRoomPalette() {
     const roomOrder = ['garrison', 'spymaster', 'commander', 'armory',
                       'alchemy', 'corruption', 'thaumaturge', 'sacrificial',
                       'generator', 'golem', 'synth', 'flesh',
-                      'smithy', 'sealed', 'path'];
+                      'smithy', 'sealed', 'path', 'architect'];
 
     roomOrder.forEach(roomId => {
         const room = ROOMS[roomId];
