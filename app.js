@@ -188,6 +188,18 @@ const ROOMS = {
         },
         medallions: { type: null, t1t2: null, t3: null },
         destabilizes: true
+    },
+    architect: {
+        name: 'Architect',
+        icon: '👁',
+        iconImg: ICON_PATH + 'IconArchitect.webp',
+        color: 'room-architect',
+        connects: ['garrison', 'commander', 'armory', 'spymaster', 'alchemy', 'corruption', 'thaumaturge', 'generator', 'golem', 'synth', 'smithy', 'sacrificial', 'flesh', 'path', 'sealed'],
+        tierNames: ['Architect', 'Architect', 'Architect'],
+        effects: {},
+        medallions: { type: null, t1t2: null, t3: null },
+        isMarker: true, // Special flag - this is just a marker, not a real room
+        limit: 1
     }
 };
 
@@ -511,6 +523,22 @@ function canPlaceRoom(row, col, roomType) {
                 if (state.grid[r][c].type === 'sacrificial') return false;
             }
         }
+    }
+
+    // Architect is a marker - can be placed on any empty cell adjacent to existing rooms
+    if (roomType === 'architect') {
+        // Check limit (only 1 architect allowed)
+        for (let r = 0; r < 9; r++) {
+            for (let c = 0; c < 9; c++) {
+                if (state.grid[r][c].type === 'architect') return false;
+            }
+        }
+        // Must have an adjacent room to mark
+        const neighbors = getNeighbors(row, col);
+        for (const [nr, nc] of neighbors) {
+            if (state.grid[nr][nc].type) return true;
+        }
+        return false;
     }
 
     // Special case: START connects to the left edge middle (row 4, col 0)
