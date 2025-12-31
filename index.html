@@ -84,7 +84,55 @@
         </div>
 
         <div class="main-content">
-            <!-- Grid Section -->
+            <!-- Left Panel - Stats -->
+            <div class="panel panel-left">
+                <!-- Temple Stats - Like in-game -->
+                <div class="panel-section">
+                    <h3>Temple Modifiers</h3>
+                    <div class="loot-stats" id="loot-stats">
+                        <div class="loot-stat">Place rooms to see bonuses...</div>
+                    </div>
+                </div>
+
+                <!-- Chain Stats -->
+                <div class="panel-section">
+                    <h3>Chain Status</h3>
+                    <div class="stats-display">
+                        <div class="stat-row">
+                            <span class="stat-label">Chain Length</span>
+                            <span class="stat-value magic" id="stat-chain">0 rooms</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Spy Masters</span>
+                            <span class="stat-value" id="stat-spymasters">0 / 6</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Has Commander</span>
+                            <span class="stat-value" id="stat-commander">No</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Chain Protected</span>
+                            <span class="stat-value" id="stat-protected">No</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medallion Stats -->
+                <div class="panel-section medallion-panel">
+                    <h3>Medallion Sources</h3>
+                    <div class="medallion-stats" id="medallion-stats">
+                        <div class="medallion-stat">No medallion sources yet...</div>
+                    </div>
+                </div>
+
+                <!-- Warnings -->
+                <div class="panel-section warnings-panel" id="warnings-panel" style="display: none;">
+                    <h3>Warnings</h3>
+                    <div id="warnings-list"></div>
+                </div>
+            </div>
+
+            <!-- Grid Section - Center -->
             <div class="grid-section">
                 <div style="text-align: center;">
                     <span class="grid-section-title">TEMPLE CONSOLE</span>
@@ -108,13 +156,13 @@
                 </div>
             </div>
 
-            <!-- Right Panel -->
-            <div class="panel">
+            <!-- Right Panel - Controls -->
+            <div class="panel panel-right">
                 <!-- Room Palette -->
                 <div class="panel-section">
                     <h3>Room Palette</h3>
                     <div class="room-palette" id="room-palette"></div>
-                    <p style="font-size: 0.8rem; color: #777; margin-top: 10px;">Click room then click grid. Right-click or Shift+click to remove.</p>
+                    <p style="font-size: 0.7rem; color: #777; margin-top: 6px;">Click room then click grid. Right-click to remove.</p>
                 </div>
 
                 <!-- Round Input -->
@@ -145,51 +193,6 @@
                     </div>
 
                     <button class="optimize-btn" id="optimize-btn">What Should I Do?</button>
-                </div>
-
-                <!-- Temple Stats - Like in-game -->
-                <div class="panel-section">
-                    <h3>Temple Modifiers</h3>
-                    <div class="loot-stats" id="loot-stats">
-                        <div class="loot-stat">Place rooms to see bonuses...</div>
-                    </div>
-                </div>
-
-                <!-- Medallion Stats -->
-                <div class="panel-section medallion-panel">
-                    <h3>Medallion Sources</h3>
-                    <div class="medallion-stats" id="medallion-stats">
-                        <div class="medallion-stat">No medallion sources yet...</div>
-                    </div>
-                </div>
-
-                <!-- Chain Stats -->
-                <div class="panel-section">
-                    <h3>Chain Status</h3>
-                    <div class="stats-display">
-                        <div class="stat-row">
-                            <span class="stat-label">Chain Length</span>
-                            <span class="stat-value magic" id="stat-chain">0 rooms</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Spy Masters</span>
-                            <span class="stat-value" id="stat-spymasters">0 / 6</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Has Commander</span>
-                            <span class="stat-value" id="stat-commander">No</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-label">Chain Protected</span>
-                            <span class="stat-value" id="stat-protected">No</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Warnings -->
-                <div class="panel-section warnings-panel" id="warnings-panel" style="display: none;">
-                    <h3>Warnings</h3>
-                    <div id="warnings-list"></div>
                 </div>
 
                 <!-- Actions -->
