@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PoE2 Vaal Temple Optimizer - Snake Chain Planner</title>
+    <meta name="description" content="Plan your Path of Exile 2 Vaal Temple layout. Build optimal snake chains for maximum loot with the visual temple planner.">
+    <meta name="keywords" content="PoE2, Path of Exile 2, Vaal Temple, Temple Optimizer, Snake Chain, Incursion, Temple Planner">
+    <meta name="author" content="Temple Optimizer">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="PoE2 Vaal Temple Optimizer">
+    <meta property="og:description" content="Plan your Path of Exile 2 Vaal Temple layout. Build optimal snake chains for maximum loot.">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/webp" href="assets/icons/IconAtziri.webp">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>VAAL TEMPLE OPTIMIZER</h1>
+            <p>Build the perfect snake chain for maximum divine drops</p>
+            <button class="info-btn" id="info-btn" title="How to use">?</button>
+        </header>
+
+        <!-- Info Modal -->
+        <div class="info-modal-overlay" id="info-modal" style="display: none;">
+            <div class="info-modal">
+                <button class="info-modal-close" id="info-close">&times;</button>
+                <h2>How to Use</h2>
+
+                <div class="info-section">
+                    <h3>Basic Controls</h3>
+                    <ul>
+                        <li><strong>Place rooms:</strong> Click a room in the palette, then click an empty grid cell</li>
+                        <li><strong>Remove rooms:</strong> Right-click or Shift+click on a placed room</li>
+                        <li><strong>Hover:</strong> See room details, effects, and medallion drops</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h3>Planning Your Round</h3>
+                    <ul>
+                        <li>Enter your current <strong>Lock</strong> and <strong>Tier</strong> medallions</li>
+                        <li>Click the 6 card slots to select the room cards you drew</li>
+                        <li>Click <strong>"What Should I Do?"</strong> for placement recommendations</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h3>The Snake Strategy</h3>
+                    <ul>
+                        <li><strong>Goal:</strong> Build a single chain with 6+ Spy Masters for self-sustaining locks</li>
+                        <li><strong>Pattern:</strong> Garrison → Spy Master → Garrison → Armory → repeat</li>
+                        <li><strong>Warning:</strong> Adding a Commander blocks future Spy Masters!</li>
+                        <li><strong>Tip:</strong> Garrisons next to Spy Masters become Legion Barracks (more medallions)</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h3>Special Features</h3>
+                    <ul>
+                        <li><strong>Destab Sim:</strong> See which rooms are at risk and simulate destabilization</li>
+                        <li><strong>Export Image:</strong> Download your temple layout as a PNG</li>
+                        <li><strong>Share URL:</strong> Copy a shareable link to your layout</li>
+                        <li><strong>Sample Temple:</strong> Generate an example optimal layout</li>
+                    </ul>
+                </div>
+
+                <div class="info-section">
+                    <h3>Connection Lines</h3>
+                    <ul>
+                        <li><span style="color:#a78bfa;">Purple</span> = Spy Master connections (high priority)</li>
+                        <li><span style="color:#f97316;">Orange</span> = Commander connections</li>
+                        <li><span style="color:#af6025;">Gold</span> = Standard connections</li>
+                    </ul>
+                </div>
+
+                <p class="info-footer">Based on Fubgun & Milky's snake chain strategies</p>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <!-- Grid Section -->
+            <div class="grid-section">
+                <div style="text-align: center;">
+                    <span class="grid-section-title">TEMPLE CONSOLE</span>
+                </div>
+                <div class="grid-container">
+                    <!-- Rotated container with Start/Grid/Atziri in a row -->
+                    <div class="grid-wrapper">
+                        <!-- START - left side (appears as bottom after rotation) -->
+                        <div class="special-cell start-cell">
+                            <div class="special-content">START</div>
+                        </div>
+
+                        <!-- Main 9x9 grid -->
+                        <div class="grid" id="temple-grid"></div>
+
+                        <!-- ATZIRI - right side (appears as top after rotation) -->
+                        <div class="special-cell atziri-cell">
+                            <div class="special-content">ATZIRI</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel -->
+            <div class="panel">
+                <!-- Room Palette -->
+                <div class="panel-section">
+                    <h3>Room Palette</h3>
+                    <div class="room-palette" id="room-palette"></div>
+                    <p style="font-size: 0.8rem; color: #777; margin-top: 10px;">Click room then click grid. Right-click or Shift+click to remove.</p>
+                </div>
+
+                <!-- Round Input -->
+                <div class="panel-section round-input-panel">
+                    <h3>This Round</h3>
+
+                    <!-- Medallions I Have -->
+                    <div class="input-group">
+                        <label>My Medallions:</label>
+                        <div class="medallion-inputs">
+                            <div class="medallion-input">
+                                <img src="assets/icons/MedallionPreventDeletionOfRoom.webp" alt="Lock" class="medallion-icon-img" title="Juatalotli's (Lock)">
+                                <input type="number" id="lock-medallions" min="0" max="10" value="0" title="Juatalotli's (Lock)">
+                                <span class="medallion-label">Lock</span>
+                            </div>
+                            <div class="medallion-input">
+                                <img src="assets/icons/MedallionLevelUpRoom.webp" alt="Tier Up" class="medallion-icon-img" title="Quipolatl's (Tier Up)">
+                                <input type="number" id="tier-medallions" min="0" max="10" value="0" title="Quipolatl's (Tier Up)">
+                                <span class="medallion-label">Tier</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6 Cards -->
+                    <div class="input-group">
+                        <label>My 6 Cards:</label>
+                        <div class="cards-grid" id="cards-input"></div>
+                    </div>
+
+                    <button class="optimize-btn" id="optimize-btn">What Should I Do?</button>
+                </div>
+
+                <!-- Temple Stats - Like in-game -->
+                <div class="panel-section">
+                    <h3>Temple Modifiers</h3>
+                    <div class="loot-stats" id="loot-stats">
+                        <div class="loot-stat">Place rooms to see bonuses...</div>
+                    </div>
+                </div>
+
+                <!-- Medallion Stats -->
+                <div class="panel-section medallion-panel">
+                    <h3>Medallion Sources</h3>
+                    <div class="medallion-stats" id="medallion-stats">
+                        <div class="medallion-stat">No medallion sources yet...</div>
+                    </div>
+                </div>
+
+                <!-- Chain Stats -->
+                <div class="panel-section">
+                    <h3>Chain Status</h3>
+                    <div class="stats-display">
+                        <div class="stat-row">
+                            <span class="stat-label">Chain Length</span>
+                            <span class="stat-value magic" id="stat-chain">0 rooms</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Spy Masters</span>
+                            <span class="stat-value" id="stat-spymasters">0 / 6</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Has Commander</span>
+                            <span class="stat-value" id="stat-commander">No</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Chain Protected</span>
+                            <span class="stat-value" id="stat-protected">No</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Warnings -->
+                <div class="panel-section warnings-panel" id="warnings-panel" style="display: none;">
+                    <h3>Warnings</h3>
+                    <div id="warnings-list"></div>
+                </div>
+
+                <!-- Actions -->
+                <div class="panel-section">
+                    <h3>Actions</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" id="save-btn">Save</button>
+                        <button class="action-btn" id="load-btn">Load</button>
+                        <button class="action-btn" id="export-btn">Share URL</button>
+                        <button class="action-btn danger" id="reset-btn">Reset</button>
+                    </div>
+                    <button class="action-btn sample-btn" id="sample-btn" style="width:100%; margin-top:6px;">Generate Sample Temple</button>
+                    <div class="action-buttons" style="margin-top:6px;">
+                        <button class="action-btn destab-btn" id="destab-btn">Destab Sim</button>
+                        <button class="action-btn export-img-btn" id="export-img-btn">Export Image</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Panel -->
+        <div class="bottom-panel">
+            <div class="panel-section">
+                <h3>Placement Recommendations</h3>
+                <div class="recommendations" id="recommendations">
+                    <p style="color: #666; font-size: 0.75rem;">Select your 6 cards and click "Optimize" to see recommendations.</p>
+                </div>
+            </div>
+            <div class="panel-section">
+                <h3>Quick Reference</h3>
+                <div class="connection-guide">
+                    <p><span class="room-tag" style="background:#8b2020;">Garrison</span> → Commander, Armory, Spy Master, Synth Lab</p>
+                    <p><span class="room-tag" style="background:#6020a0;">Spy Master</span> → Garrison only (converts to Legion Barracks!)</p>
+                    <p><span class="room-tag" style="background:#b04010;">Commander</span> → Garrison, Armory <span style="color:#f44;">(BLOCKS SPY MASTERS!)</span></p>
+                    <p><span class="room-tag" style="background:#107080;">Armory</span> → Garrison, Commander, Alchemy Lab, Thaumaturge</p>
+                    <p><span class="room-tag" style="background:#208020;">Alchemy Lab</span> → Armory, Thaumaturge, Corruption Chamber</p>
+                    <p style="margin-top: 8px; color: #af6025;">Goal: Garrison → Spy Master → Garrison → Armory → repeat (6+ Spy Masters)</p>
+                </div>
+            </div>
+        </div>
+
+        <footer class="app-footer">
+            <p>PoE2 Vaal Temple Optimizer - A fan-made tool for Path of Exile 2</p>
+            <p class="disclaimer">Not affiliated with Grinding Gear Games. Game data sourced from <a href="https://poe2db.tw" target="_blank" rel="noopener">PoE2DB</a>.</p>
+            <p class="credits">Strategy based on community guides by Fubgun & Milky</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

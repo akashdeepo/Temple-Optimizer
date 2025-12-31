@@ -1,0 +1,21 @@
+# Reference files (development only)
+reference images/
+connection_questions.txt
+
+# Experimental/development files
+genetic-optimizer.html
+snake-pattern-analyzer.html
+30-room-calculator.html
+73-room-calculator.html
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
