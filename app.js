@@ -525,7 +525,7 @@ function canPlaceRoom(row, col, roomType) {
         }
     }
 
-    // Architect is a marker - can be placed on any empty cell adjacent to existing rooms
+    // Architect is a marker - can be placed anywhere on the grid
     if (roomType === 'architect') {
         // Check limit (only 1 architect allowed)
         for (let r = 0; r < 9; r++) {
@@ -533,12 +533,7 @@ function canPlaceRoom(row, col, roomType) {
                 if (state.grid[r][c].type === 'architect') return false;
             }
         }
-        // Must have an adjacent room to mark
-        const neighbors = getNeighbors(row, col);
-        for (const [nr, nc] of neighbors) {
-            if (state.grid[nr][nc].type) return true;
-        }
-        return false;
+        return true; // Can place anywhere
     }
 
     // Special case: START connects to the left edge middle (row 4, col 0)
